@@ -40,3 +40,4 @@
 *.opendb
 *.db
 *.exe
+.vs/dsefix_console/v14/.suo
