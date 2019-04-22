@@ -1,8 +1,9 @@
 # dsefix  
 Windows x64 Driver Signature Enforcement Overrider  
 
+CPU-Z driver does not work from windows 10 1803. Since MmMapIoSpace does not allow to map page table, Application with CPU-Z driver can not translate virtual address to physical address anymore.
 
-In windows 10 1903, g_CiOptions value is not 0x6 but 0x2006.  
+In my windows 10 1903, g_CiOptions value is not 0x6 but 0x2006.  
 I changed shellcode using bit operation so no more bsod when DSE re-enabled.  
 
 before  
