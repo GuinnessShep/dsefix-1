@@ -27,13 +27,15 @@ C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib\MFC
 //C++, Code Generation, /GS-
 //C++, Code Generation, Basic Runtime Check, default
 //C++, Optimization, remove /GL
-//Linker, /SAFESEH:NO (x86)
+//Linker, Advanced, /SAFESEH:NO (x86)
+//Linker, Debugging, /MAP
 
+__declspec(dllimport) void terminate();
+extern "C" __declspec(dllimport) void __CxxFrameHandler();
 #ifdef _WIN64
-#pragma comment(lib, "vs6port.lib")
+void __std_terminate() { terminate(); }
+extern "C" void __CxxFrameHandler3() { __CxxFrameHandler(); }
 #else
-void terminate();
 __declspec(naked) void __std_terminate() { __asm jmp terminate }
-extern "C" void __CxxFrameHandler();
 extern "C" __declspec(naked) void __CxxFrameHandler3() { __asm jmp __CxxFrameHandler }
 #endif
