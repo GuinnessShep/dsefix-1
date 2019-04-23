@@ -1,18 +1,5 @@
 #include "vs6.h"
 
-//for vs6 project in vs2015
-
-//C++, Code Generation, /GS-
-//C++, Code Generation, Basic Runtime Check, default
-
-//for C++ exception handling
-extern "C" EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler(PEXCEPTION_RECORD *a, void* b, PCONTEXT c, void* d);
-extern "C" EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler3(PEXCEPTION_RECORD *a, void* b, PCONTEXT c, void* d) { return __CxxFrameHandler(a, b, c, d); }
-
-void __cdecl terminate();
-void __cdecl __std_terminate() { terminate(); }
-
-
 #include <Psapi.h>
 #include <stdio.h>
 #pragma comment(lib, "Psapi.lib")
