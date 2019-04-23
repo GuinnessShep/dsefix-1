@@ -1,11 +1,16 @@
-#include <windows.h>
+#include "vs6.h"
 
-//for msvcrt project in vs2015
-//define __std_terminate and __CxxFrameHandler3
-void __cdecl terminate();
-void __cdecl __std_terminate() { terminate(); }
+//for vs6 project in vs2015
+
+//C++, Code Generation, /GS-
+//C++, Code Generation, Basic Runtime Check, default
+
+//for C++ exception handling
 extern "C" EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler(PEXCEPTION_RECORD *a, void* b, PCONTEXT c, void* d);
 extern "C" EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler3(PEXCEPTION_RECORD *a, void* b, PCONTEXT c, void* d) { return __CxxFrameHandler(a, b, c, d); }
+
+void __cdecl terminate();
+void __cdecl __std_terminate() { terminate(); }
 
 
 #include <Psapi.h>
@@ -17,10 +22,12 @@ extern "C" EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler3(PEXCEPTION_RECORD *a
 #include "vbox.h"
 #include "vboxdrv.h"
 
-
-#pragma comment(lib, "ntdll.lib")
-extern "C" DWORD RtlGetVersion(PRTL_OSVERSIONINFOW lpVersionInformation);
-
+#ifdef _WIN64
+#pragma comment(lib, "ntdll64.lib")
+#else
+#pragma comment(lib, "ntdll86.lib")
+#endif
+extern "C" DWORD WINAPI RtlGetVersion(PRTL_OSVERSIONINFOW lpVersionInformation);
 
 DWORD64 GetKernelBase(LPCSTR szModule) {
 	LPVOID DriverList[1024];
@@ -145,10 +152,10 @@ private:
 public:
 
 	BOOL DropFile(LPCSTR szFileName, LPCVOID pData, DWORD Size) {
-		if (!GetSystemDirectoryA(szFilePath, MAX_PATH))
-			return FALSE;
-		//if (!GetCurrentDirectoryA(MAX_PATH, this->szFileName))
+		//if (!GetSystemDirectoryA(szFilePath, MAX_PATH))
 		//	return FALSE;
+		if (!GetCurrentDirectoryA(MAX_PATH, szFilePath))
+			return FALSE;
 
 		strcat(szFilePath, "\\");
 		strcat(szFilePath, szFileName);
@@ -346,7 +353,7 @@ public:
 		vmFast.Hdr.fFlags = SUPREQHDR_FLAGS_DEFAULT;
 		vmFast.Hdr.cbIn = SUP_IOCTL_SET_VM_FOR_FAST_SIZE_IN;
 		vmFast.Hdr.cbOut = SUP_IOCTL_SET_VM_FOR_FAST_SIZE_OUT;
-		vmFast.u.In.pVMR0 = (LPVOID)supImageHandle;
+		vmFast.u.In.pVMR0 = (UINT64)supImageHandle;
 
 		if (!DeviceIoControl(hDevice, SUP_IOCTL_SET_VM_FOR_FAST,
 			&vmFast, SUP_IOCTL_SET_VM_FOR_FAST_SIZE_IN,

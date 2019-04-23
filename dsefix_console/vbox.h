@@ -5,7 +5,9 @@
 #define supImageName    "aoba"
 #define supImageHandle  0x1a000
 
-typedef void* RTR0PTR;
+typedef UINT64 RTR0PTR;
+
+#pragma pack(push, 8)
 
 typedef struct _SUPREQHDR {
 	/** Cookie. */
@@ -96,7 +98,7 @@ typedef struct _SUPSETVMFORFAST {
 		struct
 		{
 			/** The ring-0 VM handle (pointer). */
-			PVOID           pVMR0;
+			UINT64           pVMR0;
 		} In;
 	} u;
 } SUPSETVMFORFAST, *PSUPSETVMFORFAST;
@@ -110,9 +112,9 @@ typedef struct _SUPLDRLOAD
 		struct
 		{
 			/** The address of module initialization function. Similar to _DLL_InitTerm(hmod, 0). */
-			PVOID pfnModuleInit;
+			UINT64 pfnModuleInit;
 			/** The address of module termination function. Similar to _DLL_InitTerm(hmod, 1). */
-			PVOID pfnModuleTerm;
+			UINT64 pfnModuleTerm;
 			/** Special entry points. */
 			union
 			{
@@ -229,3 +231,5 @@ typedef struct _SUPLDRFREE {
 		} In;
 	} u;
 } SUPLDRFREE, *PSUPLDRFREE;
+
+#pragma pack(pop)
