@@ -1,5 +1,4 @@
-#include "vs6.h"
-
+#include <Windows.h>
 #include <Psapi.h>
 #include <stdio.h>
 #pragma comment(lib, "Psapi.lib")
@@ -8,6 +7,8 @@
 
 #include "vbox.h"
 #include "vboxdrv.h"
+
+#include "vs6.h"
 
 #ifdef _WIN64
 #pragma comment(lib, "ntdll64.lib")
@@ -388,7 +389,6 @@ int WINAPI WinMain(
 int main(int argc, char *argv[]) {
 	bool bEnable = argc > 1;
 #endif
-
 	DSEFIX dsefix;
 	DWORD64 CiOptionsAddress = GetCiOptionsAddress();
 	if (CiOptionsAddress == 0)
