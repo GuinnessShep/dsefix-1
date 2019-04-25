@@ -377,6 +377,7 @@ public:
 };
 
 
+//#include <process.h>
 
 #ifndef _DEBUG
 int WINAPI WinMain(
@@ -384,11 +385,13 @@ int WINAPI WinMain(
 	HINSTANCE hPrevInstance,
 	LPSTR     lpCmdLine,
 	int       nShowCmd) {
-	bool bEnable = strlen(lpCmdLine) > 0;
 #else
 int main(int argc, char *argv[]) {
-	bool bEnable = argc > 1;
 #endif
+	int NumArgs = 0;
+	CommandLineToArgvW(GetCommandLineW(), &NumArgs);
+	bool bEnable = NumArgs > 1;
+
 	DSEFIX dsefix;
 	DWORD64 CiOptionsAddress = GetCiOptionsAddress();
 	if (CiOptionsAddress == 0)
@@ -400,5 +403,5 @@ int main(int argc, char *argv[]) {
 	dsefix.StopDriver();
 	dsefix.CleanFile();
 
-	return 0;
+	exit(0);
 }
