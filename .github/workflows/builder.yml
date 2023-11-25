@@ -1,0 +1,20 @@
+name: Build Visual Studio Project
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build solution
+      run: msbuild desfix_console.sln /p:Configuration=Release /p:Platform="Any CPU"
